@@ -1,0 +1,78 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+<!-- Включаємо панель навігації -->
+{% include 'navbar.html' %}
+
+<!-- Контейнер для списку файлів -->
+<div class="container mt-5">
+    <h1 class="mb-4">Список файлів</h1>
+    <!-- Таблиця для відображення файлів -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Імʼя файлу</th>
+                <th scope="col">Дата і час створення</th>
+                <th scope="col">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Перебір файлів у змінній files та відображення їх в таблиці -->
+            {% for file in files %}
+            <tr>
+                <td>{{ file.name }}</td>
+                <td>{{ file.creation_time }}</td>
+                <!-- Кнопка для завантаження файлу -->
+                <td class="button-container">
+                    <a href="{{ url_for('download_file', filename=file.name) }}" class="btn btn-primary download-btn" onmouseover="runAway(this)">Скачати</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Кнопка для повернення на попередню сторінку -->
+    <button class="btn btn-primary" onclick="history.back()">Назад</button>
+</div>
+
+<style>
+    .button-container {
+        position: relative;
+        text-align: center;
+    }
+    .download-btn {
+        position: relative;
+        transition: transform 0.2s;
+    }
+</style>
+
+<script>
+    // Збереження початкових позицій кнопок
+    let originalPositions = new Map();
+
+    function runAway(button) {
+        // Якщо початкові позиції не збережені, зберігаємо їх
+        if (!originalPositions.has(button)) {
+            const rect = button.getBoundingClientRect();
+            originalPositions.set(button, { left: rect.left, top: rect.top });
+        }
+
+        // Отримуємо розміри кнопки та вікна
+        const buttonWidth = button.offsetWidth;
+        const buttonHeight = button.offsetHeight;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+
+        const newLeft = Math.random() * (windowWidth - buttonWidth);
+        const newTop = Math.random() * (windowHeight - buttonHeight);
+
+
+        button.style.transform = `translate(${newLeft - originalPositions.get(button).left}px, ${newTop - originalPositions.get(button).top}px)`;
+
+
+        setTimeout(() => {
+            button.style.transform = 'translate(0, 0)';
+        }, 1000);
+    }
+</script>
+{% endblock %}

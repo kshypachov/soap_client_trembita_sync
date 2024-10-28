@@ -1,0 +1,30 @@
+{% extends "bootstrap/base.html" %}  <!-- Розширюємо базовий шаблон Bootstrap -->
+
+{% block content %}
+{% include 'navbar.html' %}  <!-- Включаємо навігаційну панель -->
+
+<div class="container mt-5">
+    <h1 class="mb-4">Список файлів</h1>  <!-- Заголовок для сторінки зі списком файлів -->
+    <table class="table table-striped">  <!-- Таблиця для відображення файлів зі стилем "смугаста таблиця" -->
+        <thead>
+            <tr>
+                <th scope="col">Імʼя файлу</th>  <!-- Заголовок колонки для імен файлів -->
+                <th scope="col">Дата і час створення</th>  <!-- Заголовок колонки для дати і часу створення файлів -->
+                <th scope="col">Дії</th>  <!-- Заголовок колонки для дій -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}  <!-- Цикл для проходження по всіх файлах -->
+            <tr>
+                <td>{{ file.name }}</td>  <!-- Відображаємо ім'я файлу -->
+                <td>{{ file.creation_time }}</td>  <!-- Відображаємо дату і час створення файлу -->
+                <td>
+                    <a href="{{ url_for('download_file', filename=file.name) }}" class="btn btn-primary">Скачати</a>  <!-- Посилання для завантаження файлу -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-primary" onclick="history.back()">Назад</button>  <!-- Кнопка для повернення на попередню сторінку -->
+</div>
+{% endblock %}

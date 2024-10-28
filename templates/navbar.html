@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Логотип або назва сайту -->
+    <a class="navbar-brand" href="/">Реєстр</a>
+    <!-- Кнопка для перемикання навігаційної панелі на мобільних пристроях -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Основний блок навігаційної панелі, який буде показуватися або ховатися при натисканні на кнопку -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <!-- Пункт меню для пошуку, який буде активним, якщо поточна сторінка є "index" -->
+            <li class="nav-item {% if current_page == 'index' %}active{% endif %}">
+                <a class="nav-link" href="/">Пошук<span class="sr-only">(current)</span></a>
+            </li>
+            <!-- Пункт меню для створення запису, який буде активним, якщо поточна сторінка є "create" -->
+            <li class="nav-item {% if current_page == 'create' %}active{% endif %}">
+                <a class="nav-link" href="/create">Створення запису</a>
+            </li>
+            <!-- Пункт меню для сторінки ASIC контейнерів, який буде активним, якщо поточна сторінка є "files" -->
+            <li class="nav-item {% if current_page == 'files' %}active{% endif %}">
+                <a class="nav-link" href="/files">Сторінка ASIC контейнерів</a>
+            </li>
+            <!-- Пункт меню для сторінки сертифікатів, який буде активним, якщо поточна сторінка є "certs" -->
+            <li class="nav-item {% if current_page == 'certs' %}active{% endif %}">
+                <a class="nav-link" href="/certs">Сертифікати</a>
+            </li>
+        </ul>
+    </div>
+</nav>

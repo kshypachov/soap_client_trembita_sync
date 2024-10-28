@@ -1,0 +1,15 @@
+{% extends "bootstrap/base.html" %}  <!-- Розширюємо базовий шаблон Bootstrap -->
+
+{% block content %}
+{% include 'navbar.html' %}  <!-- Включаємо навігаційну панель -->
+
+<div class="container mt-5">
+    <h1 class="mb-4">Помилка</h1>  <!-- Заголовок для сторінки з помилкою -->
+    <div class="alert alert-danger" role="alert">  <!-- Відображаємо повідомлення про помилку у вигляді червоного блоку -->
+        <h4 class="alert-heading">Сталась помилка!</h4>  <!-- Заголовок повідомлення про помилку -->
+        <p>{{ error_message }}</p>  <!-- Виводимо повідомлення про помилку з переданого змінного error_message -->
+        <hr>
+        <button class="btn btn-primary" onclick="history.back()">Назад</button>  <!-- Кнопка для повернення на попередню сторінку -->
+    </div>
+</div>
+{% endblock %}

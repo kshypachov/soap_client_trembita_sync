@@ -1,0 +1,25 @@
+{% extends "bootstrap/base.html" %}  <!-- Розширюємо базовий шаблон Bootstrap -->
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Картки</h1>  <!-- Заголовок для сторінки з картками -->
+    {% for item in data %}  <!-- Цикл для проходження по всіх елементах у даних -->
+    <div class="card mb-3">
+        <div class="card-header">
+            ID запису у БД: {{ item.id }}  <!-- Відображаємо ID запису у базі даних -->
+        </div>
+        <div class="card-body">
+            <h5 class="card-title"><i class="fas fa-user"></i> Ім'я: {{ item.name }}</h5>  <!-- Відображаємо ім'я з іконкою користувача -->
+            <p class="card-text"><strong>Призвище:</strong> {{ item.surname }}</p>  <!-- Відображаємо прізвище -->
+            <p class="card-text"><strong>По батькові:</strong> {{ item.patronym }}</p>  <!-- Відображаємо по батькові -->
+            <p class="card-text"><strong>Дата народження:</strong> {{ item.dateOfBirth }}</p>  <!-- Відображаємо дату народження -->
+            <p class="card-text"><strong>Стать:</strong> {{ item.gender }}</p>  <!-- Відображаємо стать -->
+            <p class="card-text"><strong>РНОКПП:</strong> {{ item.rnokpp }}</p>  <!-- Відображаємо РНОКПП -->
+            <p class="card-text"><strong>Номер паспорту:</strong> {{ item.passportNumber }}</p>  <!-- Відображаємо номер паспорту -->
+            <p class="card-text"><strong>УНЗР:</strong> {{ item.unzr }}</p>  <!-- Відображаємо УНЗР -->
+        </div>
+    </div>
+    {% endfor %}
+    <button class="btn btn-primary" onclick="history.back()">Назад</button>  <!-- Кнопка для повернення на попередню сторінку -->
+</div>
+{% endblock %}

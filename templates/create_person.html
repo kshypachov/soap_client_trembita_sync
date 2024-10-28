@@ -1,0 +1,92 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+{% include 'navbar.html' %}  <!-- Включаємо навігаційну панель -->
+
+<div class="container mt-5">
+    <div id="messageBox" style="display: none;"></div>  <!-- Поле для відображення повідомлень -->
+
+    <h2>Створення нового запису</h2>
+    <form id="createForm" method="POST" action="/create">
+        <div class="form-group">
+            <label for="name">Імʼя</label>
+            <input type="text" class="form-control" id="name" name="name" required>  <!-- Поле для введення імені -->
+        </div>
+        <div class="form-group">
+            <label for="surname">Прізвище</label>
+            <input type="text" class="form-control" id="surname" name="surname" required>  <!-- Поле для введення прізвища -->
+        </div>
+        <div class="form-group">
+            <label for="patronymic">По батькові</label>
+            <input type="text" class="form-control" id="patronym" name="patronym" required>  <!-- Поле для введення по батькові -->
+        </div>
+        <div class="form-group">
+            <label for="gender">Стать</label>
+            <select class="form-control" id="gender" name="gender" required>  <!-- Поле для вибору статі -->
+                <option value="male">Чоловіча</option>
+                <option value="female">Жіноча</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Дата народження</label>
+            <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>  <!-- Поле для введення дати народження -->
+        </div>
+        <div class="form-group">
+            <label for="passportNumber">Номер паспорту</label>
+            <input type="text" class="form-control" id="passportNumber" name="passportNumber" required>  <!-- Поле для введення номеру паспорту -->
+        </div>
+        <div class="form-group">
+            <label for="unzr">УНЗР</label>
+            <input type="text" class="form-control" id="unzr" name="unzr" required>  <!-- Поле для введення УНЗР -->
+        </div>
+        <div class="form-group">
+            <label for="rnokpp">РНОКПП</label>
+            <input type="text" class="form-control" id="rnokpp" name="rnokpp" required>  <!-- Поле для введення РНОКПП -->
+        </div>
+        <button type="submit" class="btn btn-primary">Створити запис</button>  <!-- Кнопка для відправки форми -->
+    </form>
+</div>
+
+<script>
+document.getElementById('createForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Запобігаємо стандартному відправленню форми
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const messageBox = document.getElementById('messageBox');
+    const formObject = {};
+
+    formData.forEach((value, key) => {
+        formObject[key] = value;  // Збираємо дані форми у форматі об'єкта
+    });
+
+    fetch(form.action, {
+        method: form.method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formObject),  // Перетворюємо дані форми у JSON та надсилаємо на сервер
+    })
+    .then(response => {
+        if (response.status === 200) {
+            response.json().then(data => {
+                messageBox.textContent = 'Запис успішно створено!';  // Відображаємо повідомлення про успіх
+                messageBox.className = 'alert alert-success';
+                messageBox.style.display = 'block';
+            });
+        } else if (response.status === 422) {
+            response.json().then(data => {
+                messageBox.textContent = `Виникла помилка: ${JSON.stringify(data)}`;  // Відображаємо повідомлення про помилку
+                messageBox.className = 'alert alert-danger';
+                messageBox.style.display = 'block';
+            });
+        }
+    })
+    .catch(error => {
+        messageBox.textContent = `Виникла помилка: ${error.message}`;  // Відображаємо повідомлення про помилку у разі проблеми з запитом
+        messageBox.className = 'alert alert-danger';
+        messageBox.style.display = 'block';
+    });
+});
+</script>
+{% endblock %}

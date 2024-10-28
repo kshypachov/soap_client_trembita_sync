@@ -1,0 +1,36 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+<!-- Включаємо файл з панеллю навігації -->
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+    <!-- Заголовок сторінки -->
+    <h2>Пошук у БД</h2>
+    <!-- Форма для пошуку в базі даних -->
+    <form method="POST" action="/">
+        <!-- Група елементів форми для вибору поля пошуку -->
+        <div class="form-group">
+            <label for="search-field">Оберіть поле для пошуку</label>
+            <!-- Випадаючий список для вибору поля пошуку -->
+            <select class="form-control" id="search-field" name="search_field" required>
+                <option value="name">Імʼя</option>
+                <option value="surname">Прізвище</option>
+                <option value="patronym">По батькові</option>
+                <option value="dateOfBirth">Дата народження</option>
+                <option value="passportNumber">Номер паспорту</option>
+                <option value="unzr">УНЗР</option>
+                <option value="rnokpp">РНОКПП</option>
+            </select>
+        </div>
+        <!-- Група елементів форми для введення значення пошуку -->
+        <div class="form-group">
+            <label for="search-value">Значення для пошуку</label>
+            <!-- Текстове поле для введення значення пошуку -->
+            <input type="text" class="form-control" id="search-value" name="search_value" required>
+        </div>
+        <!-- Кнопка для відправки форми -->
+        <button type="submit" class="btn btn-primary">Пошук</button>
+    </form>
+</div>
+{% endblock %}

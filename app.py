@@ -68,7 +68,6 @@ def search_user():
         try:
             # Запит на отримання інформації про користувача
             response = utils.serv_req_get_person(search_field, search_value, conf)
-            print(response)
         except Exception as e:
             # У разі помилки відправляємо повідомлення про помилку на сторінку
             logger.error(f"Виникла помилка: {str(e)}")
@@ -112,6 +111,23 @@ def edit_user():
         resp = jsonify(message=f"Виникла помилка при обробці запиту на редагування: error: {str(e)}"), 500
         return resp
     return jsonify(message=response), 200
+
+
+# Обробка видалення користувача
+@app.route('/delete', methods = ['POST'])
+def delete_person():
+    logger.debug("Отримано POST запит на маршрут '/delete'.")
+    data = request.get_json()   # Отримуємо дані про користувача для видалення
+    logger.debug(f"Отримано запит на видалення: {data}")
+    try:
+        # Викликаємо функцію для видалення користувача
+        http_resp = utils.serv_req_delete_person(data, conf)
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        resp = jsonify(message=f"Виникла помилка при обробці запиту на видалення: error: {str(e)}"), 500
+        return resp
+    return jsonify(message= http_resp.body), 200
+
 
 # Обробка відображення списку файлів
 @app.route('/files')

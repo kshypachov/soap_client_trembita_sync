@@ -20,7 +20,6 @@ from cryptography.hazmat.primitives import serialization
 import datetime
 import os
 import logging
-import sys
 
 logger = logging.getLogger(__name__)
 
@@ -324,7 +323,7 @@ def delete_person_by_unzr_wsdl_uri(config_instance):
         'memberClass': config_instance.service_org_type,
         'memberCode': config_instance.service_org_code,
         'subsystemCode': config_instance.service_org_sub,
-        'serviceCode': config_instance.delete_person_by_unzr,
+        'serviceCode': serv_delete_person_by_unzr,
         #        'serviceVersion': trembita_service_version, # в чьому прикладі не використовуеться версія сервісу
     }
 
@@ -539,3 +538,50 @@ def serv_req_edit_person(data: dict, config_instance):
 
     response_data = serialize_object(response)
     logger.debug(f"Запит завершено успішно, дані отримано: {response_data}")
+
+
+def serv_req_delete_person(data: dict, config_instance):
+    wsdl = delete_person_by_unzr_wsdl_uri(config_instance)
+    client = create_zeep_client(wsdl, config_instance)
+
+    # Получаем типы из WSDL
+    XRoadClientIdentifierType = client.get_type('ns3:XRoadClientIdentifierType')
+    XRoadServiceIdentifierType = client.get_type('ns3:XRoadServiceIdentifierType')
+
+    # Заполняем заголовок client
+    client_header = XRoadClientIdentifierType(
+        objectType="SUBSYSTEM",  # укажите значение objectType
+        xRoadInstance=f"{config_instance.client_instance}",  # укажите значение xRoadInstance
+        memberClass=f"{config_instance.client_org_type}",  # укажите значение memberClass
+        memberCode=f"{config_instance.client_org_code}",  # укажите значение memberCode
+        subsystemCode=f"{config_instance.client_org_sub}"  # укажите значение subsystemCode, если необходимо
+    )
+
+    service_header = XRoadServiceIdentifierType(
+        objectType="SERVICE",
+        xRoadInstance=f"{config_instance.service_instance}",  # укажите значение xRoadInstance
+        memberClass=f"{config_instance.service_org_type}",  # укажите значение memberClass
+        memberCode=f"{config_instance.service_org_code}",  # укажите значение memberCode
+        subsystemCode=f"{config_instance.service_org_sub}",  # укажите значение subsystemCode, если необходимо
+        serviceCode=serv_delete_person_by_unzr,  # укажите значение serviceCode
+#        serviceVersion="?"  # укажите значение serviceVersion, если необходимо
+    )
+
+    # Указываем параметры запроса
+    user_id = config_instance.trembita_user_id  # задайте значение userId
+    request_id = str(uuid.uuid4())  # задайте значение id
+    protocol_version = "4.0"  # задайте значение protocolVersion
+
+    # Выполняем SOAP-запрос с заголовками
+    response = client.service.delete_person_by_unzr(
+        unzr=data["unzr"],
+        _soapheaders={
+            "client": client_header,
+            "service": service_header,
+            "userId": user_id,  # Укажите фактическое значение
+            "id": request_id,  # Замените на уникальный ID запроса
+            "protocolVersion": protocol_version  # Версия протокола
+        }
+    )
+
+    return response

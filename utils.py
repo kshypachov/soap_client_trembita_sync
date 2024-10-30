@@ -479,3 +479,63 @@ def serv_req_create_person(data: dict, config_instance):
 
     response_data = serialize_object(response)
     logger.debug(f"Запит завершено успішно, дані отримано: {response_data}")
+
+def serv_req_edit_person(data: dict, config_instance):
+    wsdl = edit_person_wsdl_uri(config_instance)
+    client = create_zeep_client(wsdl, config_instance)
+
+    # Получаем типы из WSDL
+    XRoadClientIdentifierType = client.get_type('ns3:XRoadClientIdentifierType')
+    XRoadServiceIdentifierType = client.get_type('ns3:XRoadServiceIdentifierType')
+    SpynePersonModel = client.get_type('ns1:SpynePersonModel')
+
+    # Заполняем заголовок client
+    client_header = XRoadClientIdentifierType(
+        objectType="SUBSYSTEM",  # укажите значение objectType
+        xRoadInstance=f"{config_instance.client_instance}",  # укажите значение xRoadInstance
+        memberClass=f"{config_instance.client_org_type}",  # укажите значение memberClass
+        memberCode=f"{config_instance.client_org_code}",  # укажите значение memberCode
+        subsystemCode=f"{config_instance.client_org_sub}"  # укажите значение subsystemCode, если необходимо
+    )
+
+    service_header = XRoadServiceIdentifierType(
+        objectType="SERVICE",
+        xRoadInstance=f"{config_instance.service_instance}",  # укажите значение xRoadInstance
+        memberClass=f"{config_instance.service_org_type}",  # укажите значение memberClass
+        memberCode=f"{config_instance.service_org_code}",  # укажите значение memberCode
+        subsystemCode=f"{config_instance.service_org_sub}",  # укажите значение subsystemCode, если необходимо
+        serviceCode=serv_edit_person,  # укажите значение serviceCode
+#        serviceVersion="?"  # укажите значение serviceVersion, если необходимо
+    )
+
+    # Указываем параметры запроса
+    user_id = config_instance.trembita_user_id  # задайте значение userId
+    request_id = str(uuid.uuid4())  # задайте значение id
+    protocol_version = "4.0"  # задайте значение protocolVersion
+
+    # Создаем объект `SpynePersonModel`
+    person_data = SpynePersonModel(
+        name = data["name"],
+        surname = data["surname"],
+        patronym = data["patronym"],
+        dateOfBirth = data["dateOfBirth"],
+        gender = data["gender"],
+        rnokpp = data["rnokpp"],
+        passportNumber = data["passportNumber"],
+        unzr = data["unzr"],
+    )
+
+    # Отправка запроса
+    response = client.service.edit_person(
+         person=person_data,
+        _soapheaders={
+            "client": client_header,
+            "service": service_header,
+            "userId":  user_id,
+            "id": request_id,
+            "protocolVersion": protocol_version
+        }
+    )
+
+    response_data = serialize_object(response)
+    logger.debug(f"Запит завершено успішно, дані отримано: {response_data}")

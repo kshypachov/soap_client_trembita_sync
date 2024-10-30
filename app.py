@@ -1,3 +1,5 @@
+from csv import excel
+
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -96,6 +98,20 @@ def create_user():
     # Якщо запит GET, просто віддаємо вебсторінку з формою для створення користувача
     return render_template('create_person.html', current_page='create')  # Прийшов GET запит, просто віддаємо вебсторінку
 
+# Обробка редагування даних користувача
+@app.route('/edit', methods = ['POST'])
+def edit_user():
+    logger.debug("Отримано POST запит на маршрут '/edit'.")
+    data = request.get_json() # Отримуємо дані для редагування
+    logger.debug(f"Отримано дані для редагування: {data}")
+    try:
+        # Викликаємо функцію для редагування даних користувача
+        response = utils.serv_req_edit_person(data, conf)
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        resp = jsonify(message=f"Виникла помилка при обробці запиту на редагування: error: {str(e)}"), 500
+        return resp
+    return jsonify(message=response), 200
 
 # Обробка відображення списку файлів
 @app.route('/files')

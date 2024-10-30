@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
+from datetime import datetime
 from flask_bootstrap import Bootstrap
 import logging
 import utils
@@ -35,6 +36,11 @@ utils.create_dir_if_not_exist(asic_directory)
 private_key_full_path = os.path.join(crt_directory, key)
 certificate_full_path = os.path.join(crt_directory, cert)
 
+# Якщо ключ або сертифікат не знайдені, генеруємо їх
+if not os.path.exists(private_key_full_path) or not os.path.exists(certificate_full_path):
+    logger.info(f"Не знайдено ключ: {key} або сертифікат {cert} у директорії {crt_directory}")
+    utils.generate_key_cert(key, cert, crt_directory)
+
 
 # Ініціалізація додатку Flask
 app = Flask(__name__)
@@ -69,6 +75,89 @@ def search_user():
 
     # Якщо запит GET, просто віддаємо вебсторінку з формою пошуку
     return render_template('search_form.html',  current_page='index') # Прийшов GET запит, просто віддаємо вебсторінку
+
+# Обробка створення нового користувача
+@app.route('/create', methods=['GET', 'POST'])
+def create_user():
+    logger.debug(f"Отримано {'POST' if request.method == 'POST' else 'GET'} запит на маршрут '/create'.")
+    if request.method == 'POST':  # Якщо прийшов POST-запит, обробляємо створення нового користувача
+        try:
+            form_data = request.get_json()  # Зчитуємо дані з форми
+            logger.debug(f"Отримано запит на створення з параметрами: {form_data}")
+            # Викликаємо функцію для додавання нового користувача
+            response = utils.serv_req_create_person(form_data, conf)
+            resp = jsonify(message=response), 200
+            return resp
+        except Exception as e:
+            logger.debug(f"Виникла помилка: {str(e)}")
+            resp = jsonify(message=f'Помилка при створенні об’єкта користувача: {str(e)}'), 422
+            return resp
+
+    # Якщо запит GET, просто віддаємо вебсторінку з формою для створення користувача
+    return render_template('create_person.html', current_page='create')  # Прийшов GET запит, просто віддаємо вебсторінку
+
+
+# Обробка відображення списку файлів
+@app.route('/files')
+def list_files():
+    logger.debug("Отримано GET запит на маршрут '/files'.")
+    try:
+        # Отримуємо список файлів у ASIC директорії
+        files = []
+        for filename in os.listdir(asic_directory):
+            filepath = os.path.join(asic_directory, filename)
+            if os.path.isfile(filepath):
+                creation_time = datetime.fromtimestamp(os.path.getctime(filepath))
+                files.append({
+                    'name': filename,
+                    'creation_time': creation_time.strftime('%Y-%m-%d %H:%M:%S')
+                })
+
+        # Сортуємо файли за датою створення в порядку спадання
+        files = sorted(files, key=lambda x: x['creation_time'], reverse=True)
+        logger.debug("Список файлів отримано успішно.")
+
+        return render_template('list_files_run_away.html', files=files, current_page='files')
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        return render_template('error.html', error_message=e, current_page='files')
+
+# Обробка відображення списку сертифікатів
+@app.route('/certs')
+def list_certs():
+    logger.debug("Отримано GET запит на маршрут '/certs'.")
+    try:
+        # Отримуємо список сертифікатів у директорії
+        files = []
+        for filename in os.listdir(crt_directory):
+            filepath = os.path.join(crt_directory, filename)
+            if os.path.isfile(filepath):
+                creation_time = datetime.fromtimestamp(os.path.getctime(filepath))
+                files.append({
+                    'name': filename,
+                    'creation_time': creation_time.strftime('%Y-%m-%d %H:%M:%S')
+                })
+
+        # Сортуємо сертифікати за датою створення в порядку спадання
+        files = sorted(files, key=lambda x: x['creation_time'], reverse=True)
+        logger.debug("Список сертифікатів отримано успішно.")
+
+        return render_template('list_certs.html', files=files, current_page='certs')
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        return render_template('error.html', error_message=e, current_page='certs')
+
+# Завантаження сертифікату
+@app.route('/download_cert/<filename>')
+def download_cert(filename):
+    logger.debug(f"Отримано GET запит на маршрут '/download_cert/{filename}'.")
+    CERT_DIR = os.path.join(os.getcwd(), crt_directory)
+    safe_filename = os.path.basename(filename)  # Валідація імені файлу для безпеки
+    try:
+        return send_from_directory(CERT_DIR, safe_filename, as_attachment=True) # Відправка сертифікату
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        return render_template('error.html', error_message=e, current_page='certs')
 
 
 

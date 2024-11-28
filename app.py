@@ -126,7 +126,8 @@ def delete_person():
         logger.error(f"Виникла помилка: {str(e)}")
         resp = jsonify(message=f"Виникла помилка при обробці запиту на видалення: error: {str(e)}"), 500
         return resp
-    return jsonify(message= http_resp.body), 200
+    return jsonify(message=http_resp.body['delete_person_by_unzrResult']), 200
+    #return jsonify(message= http_resp.body), 200
 
 
 # Обробка відображення списку файлів
@@ -149,10 +150,24 @@ def list_files():
         files = sorted(files, key=lambda x: x['creation_time'], reverse=True)
         logger.debug("Список файлів отримано успішно.")
 
-        return render_template('list_files_run_away.html', files=files, current_page='files')
+        return render_template('list_files.html', files=files, current_page='files')
     except Exception as e:
         logger.error(f"Виникла помилка: {str(e)}")
         return render_template('error.html', error_message=e, current_page='files')
+
+
+# Завантаження файлу
+@app.route('/download/<filename>')
+def download_file(filename):
+    logger.debug(f"Отримано GET запит на маршрут '/download/{filename}'.")
+    ASIC_DIR = os.path.join(os.getcwd(), asic_directory)
+    safe_filename = os.path.basename(filename) # Валідація імені файлу для безпеки
+    try:
+        return send_from_directory(ASIC_DIR, safe_filename, as_attachment=True)  # Відправка файлу
+    except Exception as e:
+        logger.error(f"Виникла помилка: {str(e)}")
+        return render_template('error.html', error_message=e, current_page='files')
+
 
 # Обробка відображення списку сертифікатів
 @app.route('/certs')

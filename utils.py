@@ -178,62 +178,6 @@ def download_asic_from_trembita(queryId: str, config_instance):
         logger.error("Функція download_asic_from_trembita працює тільки з протоколом https")
         raise ValueError("Ця функція процює тільки якщо протокол роботи з ШБО Трембіти - https")
 
-# def download_asic_from_trembita(queryId: str, config_instance):
-#     # https: // sec1.gov / signature? & queryId = abc12345 & xRoadInstance = SEVDEIR-TEST & memberClass = GOV & memberCode =
-#     # 12345678 & subsystemCode = SUB
-#     # Отримання ASIC контейнера з ШБО за допомогою GET-запиту
-#     asics_dir = config_instance.asic_path  # Отримуємо з конфігураційного файлу шлях до директорії, куди слід зберігати asic контейнери
-#
-#     query_params = {
-#         "queryId": queryId,
-#         "xRoadInstance": config_instance.client_instance,
-#         "memberClass": config_instance.client_org_type,
-#         "memberCode": config_instance.client_org_code,
-#         "subsystemCode": config_instance.client_org_sub
-#     }
-#     try:
-#         if config_instance.trembita_protocol == "https":
-#             url = f"https://{config_instance.trembita_host}/signature"
-#             logger.info(f"Спроба завантажити ASIC з ШБО з URL: {url} та параметрами: {query_params}")
-#             response = requests.get(url, stream=True, params=query_params,
-#                                     cert=(os.path.join(config_instance.cert_path, config_instance.cert_file),
-#                                           os.path.join(config_instance.cert_path, config_instance.key_file)),
-#                                     verify=os.path.join(config_instance.cert_path, config_instance.tembita_cert_file))
-#
-#         else:
-#             url = f"http://{config_instance.trembita_host}/signature"
-#             logger.info(f"Спроба завантажити ASIC з ШБО з URL: {url} та параметрами: {query_params}")
-#             response = requests.get(url, stream=True, params=query_params)
-#
-#         response.raise_for_status()
-#
-#         logger.info(f"Успішно отримано відповідь від сервера з кодом: {response.status_code}")
-#
-#         # Спроба отримати ім'я файлу з заголовку Content-Disposition
-#         content_disposition = response.headers.get('Content-Disposition')
-#         if content_disposition:
-#             # Паттерн для визначення імені файлу
-#             filename_match = re.findall('filename="(.+)"', content_disposition)
-#             if filename_match:
-#                 local_filename = filename_match[0]
-#             else:
-#                 local_filename = 'downloaded_file.ext'
-#         else:
-#             # Якщо заголовку немає, використовуємо ім'я за замовчуванням
-#             local_filename = 'downloaded_file.ext'
-#
-#         # Відкриваємо локальний файл в режимі запису байтів
-#         with open(f"{asics_dir}/{local_filename}", 'wb') as file:
-#             # Проходимо по частинах відповіді і записуємо їх у файл
-#             for chunk in response.iter_content(chunk_size=8192):
-#                 file.write(chunk)
-#         logger.info(f'Файл успішно завантажено та збережено як:  {local_filename}')
-#
-#     except requests.exceptions.RequestException as e:
-#         logger.error(f"Помилка під час завантаження файлу: {e}")
-#         raise
-
-
 def generate_key_cert(key: str, crt: str, path: str):
     # Генерація особистого ключа та сертифіката
     logger.info("Генерація ключа та сертифіката")

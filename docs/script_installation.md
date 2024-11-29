@@ -16,7 +16,7 @@
 ### Використання скрипта deploy.sh
 1. Завантажте скрипт:
 ```bash
-wget https://raw.githubusercontent.com/kshypachov/web-client_trembita_sync/refs/heads/master/deploy.sh
+wget https://raw.githubusercontent.com/kshypachov/soap_client_trembita_sync/refs/heads/master/deploy.sh
 ```
 
 2. Зробіть файл виконуваним:
@@ -31,7 +31,7 @@ chmod +x deploy.sh
 
 4. Перейдіть у директорію проекту: 
 ```bash
-cd web-client_trembita_sync
+cd soap_client_trembita_sync
 ```
 
 5. Сконфігуруйте клієнт: 
@@ -98,9 +98,6 @@ subsystemCode = your_service_subsystem_code
 # serviceCode - код сервісу, що опублікований на ШБО організації-постачальника
 serviceCode = your_service_code
 
-# serviceVersion - версія сервісу, якщо є (зазвичай сервіс не має версії). Якщо сервіс не має версії - не задавати значення
-serviceVersion = your_service_version
-
 [logging]
 # Шлях до файлу логування
 filename = path/to/client.log
@@ -136,7 +133,7 @@ level = DEBUG
 
 6. Запустіть клієнт командою:
 ```bash
-sudo systemctl enable flask-app
+sudo systemctl enable flask-app-soap
 ```
 
 7. Відкрийте в браузері посилання:

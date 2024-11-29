@@ -16,7 +16,7 @@
 ### Використання скрипта deploy.sh
 1. Завантажте скрипт:
 ```bash
-wget https://raw.githubusercontent.com/kshypachov/soap_client_trembita_sync/refs/heads/master/deploy.sh
+wget https://raw.githubusercontent.com/kshypachov/soap_client_trembita_sync/refs/heads/main/deploy.sh
 ```
 
 2. Зробіть файл виконуваним:

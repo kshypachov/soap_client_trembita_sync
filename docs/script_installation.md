@@ -29,7 +29,7 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-4. Перейдіть у директорію проекту: 
+4. Перейдіть у директорію проєкту: 
 ```bash
 cd soap_client_trembita_sync
 ```

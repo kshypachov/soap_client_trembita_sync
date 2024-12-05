@@ -37,5 +37,5 @@ EOL
 # Перезавантаження systemd для застосування змін
 sudo systemctl daemon-reload
 
-# Увімкнення та запуск Flask-застосунку
+# Увімкнення Flask-застосунку
 sudo systemctl enable flask-app-soap

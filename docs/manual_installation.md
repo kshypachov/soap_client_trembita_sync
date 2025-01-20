@@ -135,14 +135,39 @@ dateformat = %Y-%m-%d %H:%M:%S
 level = DEBUG
 ```
 
-### 6. Запуск клієнту
+### 6. Створення systemd файлу
+Файл описує як запустити програму як Linux-демон.
+Виконайте наведені нижче команди.
+
+Створіть файл:
+```bash
+sudo bash -c "cat > /etc/systemd/system/flask-app-soap.service" <<EOL
+[Unit]
+Description=Flask Application
+After=network.target
+
+[Service]
+User=$USER
+WorkingDirectory=$(pwd)
+Environment="PATH=$(pwd)/venv/bin"
+ExecStart=$(pwd)/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:5000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOL
+```
+
+Перезавантажте systemd для застосування змін:
+```bash
+sudo systemctl daemon-reload
+```
+
+### 7. Запуск клієнту
 Запустіть клієнт командою:
 
-
 ```bash
-export FLASK_APP=app.py
-export FLASK_ENV=development
-flask run --host=0.0.0.0
+sudo systemctl start flask-app-soap
 ```
 
 Кліент працює на порту 5000, комунікація з клієнтом відбувається за допомогою веб браузера.

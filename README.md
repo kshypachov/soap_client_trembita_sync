@@ -21,25 +21,25 @@
 
 ```
 web-client_trembita_sync/
-├── Dockerfile
-├── LICENSE
+├── Dockerfile                    # Докер файл для запуску контейнеру у мережі докер
+├── LICENSE          
 ├── README.Docker.md
-├── README.md
-├── app.py
-├── asic
-├── certs
-│    ├── cert.pem
-│    └── key.pem
+├── README.md                     # Документація 
+├── app.py                        # Точка входу у додаток
+├── asic                          # Директорія для збереження асік контейнерів
+├── certs                         # Диркторія для самопідписаних сертифікатів додатку та сертиівката трембіти
+│    ├── cert.pem                 # Самопідписаний сертифікат додатку
+│    └── key.pem                  # Ключ сертифікату додатку
 ├── compose.yaml
-├── config.ini
-├── deploy.sh
-├── docs
-│    ├── docker_installation.md
-│    ├── manual_installation.md
-│    └── script_installation.md
-├── remove.sh
-├── requirements.txt
-├── templates
+├── config.ini                    # Конфігураційний файл додатку
+├── deploy.sh                     # Конфігураційний файл додатку
+├── docs                
+│    ├── docker_installation.md   # Документація
+│    ├── manual_installation.md   # Документація
+│    └── script_installation.md   # Документація
+├── remove.sh                     # Скрипт ватоматичного видалення
+├── requirements.txt              # Файл залежностей додатку     
+├── templates                     # Шаблони веб сторінок
 │    ├── create_person.html
 │    ├── error.html
 │    ├── list_certs.html
@@ -49,7 +49,7 @@ web-client_trembita_sync/
 │    ├── navbar.html
 │    ├── search_form.html
 │    └── user_form.html
-└── utils.py
+└── utils.py                     # Набір утіліт для взаємодії з Трембітою
 ```
 ## Розгортання
 

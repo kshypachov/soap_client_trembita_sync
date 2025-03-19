@@ -41,7 +41,7 @@ certificate_full_path = os.path.join(crt_directory, cert)
 # Якщо ключ або сертифікат не знайдені, генеруємо їх
 if not os.path.exists(private_key_full_path) or not os.path.exists(certificate_full_path):
     logger.info(f"Не знайдено ключ: {key} або сертифікат {cert} у директорії {crt_directory}")
-    utils.generate_key_cert(key, cert, crt_directory)
+    utils.generate_ecdsa_key_cert(key, cert, crt_directory)
 
 
 # Ініціалізація додатку Flask

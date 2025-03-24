@@ -16,7 +16,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Створення Unit файлу системної служби для systemd
-SERVICE_FILE=/etc/systemd/system/flask-app-soap.service
+SERVICE_FILE=/etc/systemd/system/soap_sync_client.service
 
 sudo bash -c "cat > $SERVICE_FILE" <<EOL
 [Unit]
@@ -38,4 +38,4 @@ EOL
 sudo systemctl daemon-reload
 
 # Увімкнення Flask-застосунку
-sudo systemctl enable flask-app-soap
+sudo systemctl enable soap_sync_client

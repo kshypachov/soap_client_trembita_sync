@@ -100,11 +100,19 @@ function showDetails(id) {
     const item = {{ data|tojson }};  // Отримання даних елементів у форматі JSON
     const details = item.find(x => x.id === id);  // Знаходження потрібного елемента за ID
 
+    function formatDateForInput(dateStr) {
+        const date = new Date(dateStr);
+            if (!isNaN(date.getTime())) {
+                return date.toISOString().split('T')[0];
+            }
+        return '';
+    }
+
     // Заповнення полів форми деталями елемента
     document.getElementById('detailName').value = details.name;
     document.getElementById('detailSurname').value = details.surname;
     document.getElementById('detailPatronym').value = details.patronym;
-    document.getElementById('detailDateOfBirth').value = details.dateOfBirth;
+    document.getElementById('detailDateOfBirth').value = formatDateForInput((details.dateOfBirth))
     document.getElementById('detailGender').value = details.gender;
     document.getElementById('detailRnokpp').value = details.rnokpp;
     document.getElementById('detailPassportNumber').value = details.passportNumber;

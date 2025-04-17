@@ -68,7 +68,7 @@ web-client_trembita_sync/
 - [Конфігурація сервісу](./docs/configuration.md).
 - [Pозгортання вебсервісу в Docker ](./docs/docker_installation.md).
 
-## Адміністрування сервісу
+## Адміністрування клієнту
 
 ### Запуск вебклієнту
 

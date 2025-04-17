@@ -16,11 +16,11 @@
 - `TREMBITA_PROTOCOL` – Протокол, який використовується для взаємодії з системою Трембіта. Можливі варіанти: http або https. Наприклад, http використовується для простого підключення, а https – для захищеного підключення з автентифікацією.
 - `TREMBITA_PURPOSE_ID` – Ідентифікатор мети обробки персональних даних. Цей параметр використовується для інтеграції з Підсистемою моніторингу доступу до персональних даних (ПМДПД).
 - `TREMBITA_HOST` – Хост або IP-адреса сервера Трембіта, до якого підключається клієнт. Це може бути FQDN або локальна IP-адреса, наприклад 10.0.20.235.
-- `CLIENT_INSTANCE` – Ідентифікатор клієнтської підсистеми в системі Трембіта. Наприклад, test1 може бути тестовим інстансом для клієнта.
+- `CLIENT_INSTANCE` – Ідентифікатор клієнтської підсистеми в системі Трембіта. Наприклад, SEVDEIR-TEST може бути тестовим інстансом для клієнта.
 - `CLIENT_MEMBERCLASS` – Клас учасника системи Трембіта, наприклад GOV, який зазвичай використовується для урядових організацій.
 - `CLIENT_MEMBERCODE` – Унікальний код клієнта в системі Трембіта. Наприклад, 10000004 – це код ЄДРПОУ організації-клієнта.
 - `CLIENT_SUBSYSTEMCODE` – Код підсистеми організації-клієнта в системі Трембіта. Використовується для визначення конкретної підсистеми, яка буде обробляти запити. Наприклад, SUB_CLIENT.
-- `SERVICE_INSTANCE` – Ідентифікатор інстансу сервісу в системі Трембіта, наприклад, test1. Це ідентифікатор сервісу, на який надсилаються запити.
+- `SERVICE_INSTANCE` – Ідентифікатор інстансу сервісу в системі Трембіта, наприклад, SEVDEIR-TEST. Це ідентифікатор сервісу, на який надсилаються запити.
 - `SERVICE_MEMBERCLASS` – Клас учасника для сервісу, зазвичай такий самий, як і для клієнта (GOV).
 - `SERVICE_MEMBERCODE` – Унікальний код організації-постачальника сервісу, наприклад 10000004, код ЄДРПОУ організації, яка надає сервіс.
 - `SERVICE_SERVICECODE` – Код сервісу в системі Трембіта. Наприклад, py_sync – це код конкретного сервісу, який опублікований організацією-постачальником.
@@ -62,11 +62,11 @@ sudo docker run -it --rm -p 5000:5000 \
     -e TREMBITA_PROTOCOL=http \
     -e TREMBITA_PURPOSE_ID=1234567 \
     -e TREMBITA_HOST=10.0.20.235 \
-    -e CLIENT_INSTANCE=test1 \
+    -e CLIENT_INSTANCE=SEVDEIR-TEST \
     -e CLIENT_MEMBERCLASS=GOV \
     -e CLIENT_MEMBERCODE=10000004 \
     -e CLIENT_SUBSYSTEMCODE=SUB_CLIENT \
-    -e SERVICE_INSTANCE=test1 \
+    -e SERVICE_INSTANCE=SEVDEIR-TEST \
     -e SERVICE_MEMBERCLASS=GOV \ 
     -e SERVICE_MEMBERCODE=10000004 \
     -e SERVICE_SERVICECODE=py_sync \
@@ -90,11 +90,11 @@ sudo docker run -it --rm -p 5000:5000 \
     -e TREMBITA_PROTOCOL=http \
     -e TREMBITA_PURPOSE_ID=1234567 \
     -e TREMBITA_HOST=10.0.20.235 \
-    -e CLIENT_INSTANCE=test1 \
+    -e CLIENT_INSTANCE=SEVDEIR-TEST \
     -e CLIENT_MEMBERCLASS=GOV \
     -e CLIENT_MEMBERCODE=10000004 \
     -e CLIENT_SUBSYSTEMCODE=SUB_CLIENT \
-    -e SERVICE_INSTANCE=test1 \
+    -e SERVICE_INSTANCE=SEVDEIR-TEST \
     -e SERVICE_MEMBERCLASS=GOV \ 
     -e SERVICE_MEMBERCODE=10000004 \
     -e SERVICE_SERVICECODE=py_sync \
